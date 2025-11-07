@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Produit – Café Bliss</title>
+  <meta name="description" content="Découvrez ce produit chez Café Bliss">
+  <meta name="viewport" content="width=device-width, initial-scale=1"> 
+  <link rel="shortcut icon" href="assets/media/logos/favicon.ico">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700">
+  <link href="assets/plugins/global/plugins.bundle.css" rel="stylesheet">
+  <link href="assets/css/style.bundle.css" rel="stylesheet"> 
+  <style>
+    body { background:#ffffff !important; }
+    .hero-img { max-width:100%; height:auto; max-height:40vh; object-fit:cover; }
+    .gold-text {
+      background: linear-gradient(135deg, #c79b33ff, #ffbc21ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  </style>
+</head>
+
+<body id="kt_body" class="bg-white">
+  <div class="container py-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-xl-6"> 
+        <div id="product-card" class="card shadow-sm border-0 rounded-4 overflow-hidden"></div>
+      </div>
+    </div>
+  </div> 
+
+  <script>
+    // Get product from localStorage
+    const produit = JSON.parse(localStorage.getItem('selectedProduct'));
+    const cardDiv = document.getElementById('product-card');
+
+    if(produit){
+        cardDiv.innerHTML = `
+          <div class="position-relative">
+            <img src="${produit.image}" alt="${produit.nom}" class="img-fluid" 
+              style="max-width: 100%; height: auto; border-top-left-radius: 1rem; border-top-right-radius: 1rem;">
+            <span class="position-absolute top-0 end-0 m-3">
+              <i class="ki-duotone ki-heart-circle text-danger fs-1"></i>
+            </span>
+          </div>
+          <div class="card-body p-5">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div>
+                <h2 class="fw-bolder text-gray-900 mb-1">${produit.nom}   
+                  <span class="badge badge-light-primary fs-7 fw-semibold px-3 py-2">
+                    ${produit.categorie?.nom || ''}
+                  </span>
+                </h2>
+                <h1 class="fw-bold ms-1 gold-text">${produit.prix} DT</h1>
+                <div class="d-flex align-items-center gap-2">
+                  ${produit.prixAncien ? `<span class="text-gray-400 text-decoration-line-through">DT ${produit.prixAncien}</span>` : ''}
+                  ${produit.reduction ? `<span class="badge badge-light-success fw-bold fs-7">${produit.reduction} % OFF</span>` : ''}
+                </div>
+              </div>
+              <div class="text-end">
+                <div class="d-flex align-items-center justify-content-end gap-1">
+                  <i class="ki-duotone ki-star text-warning fs-5"></i>
+                  <span class="fw-bold text-dark fs-5">4.6</span>
+                  <span class="text-muted fs-7">(34)</span>
+                </div>
+              </div>
+            </div>
+
+            ${produit.tailles?.length ? `
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Taille</th>
+                    <th>Prix</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${produit.tailles.map(taille => `
+                    <tr>
+                      <td>${taille.libelle}</td>
+                      <td class="gold-text">${taille.prix} DT</td>
+                    </tr>
+                  `).join('')}
+                </tbody>
+              </table>
+            ` : ''}
+
+            <hr class="text-gray-200 my-4"> 
+
+            <div class="mb-5">
+              ${produit.description ? `<h5 class="fw-bold text-gray-1000 mb-2">Description</h5><p>${produit.description}</p>` : ''}
+              ${produit.reduction ? `<p>Profitez de <strong>${produit.reduction}% de réduction</strong> pendant une durée limitée !</p>` : ''}
+            </div>
+          </div>
+        `;
+    } else {
+        cardDiv.innerHTML = '<p class="text-center text-muted">Produit non trouvé.</p>';
+    }
+  </script>
+
+  <script src="assets/plugins/global/plugins.bundle.js"></script>
+  <script src="assets/js/scripts.bundle.js"></script>
+</body>
+</html>

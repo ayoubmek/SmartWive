@@ -536,37 +536,50 @@ categories.forEach((categorie, index) => {
     tabDiv.id = `kt_stats_widget_2_tab_${categorie.id}`;
 
     if(categorie.produits.length > 0){
-        const rowDiv = document.createElement("div");
-        rowDiv.className = "row g-4";
+    const rowDiv = document.createElement("div");
+    rowDiv.className = "row g-4";
 
-        categorie.produits.sort((a,b)=>a.position - b.position).forEach(produit => {
-            const prodDiv = document.createElement("div");
-            prodDiv.className = "col-6 col-sm-4 col-md-3 col-lg-2";
-            prodDiv.innerHTML = `
-                <div class="card card-flush h-100 p-2 hover:scale-105 hover:shadow-lg cursor-pointer">
-                    <div class="card-body text-center p-0">
-                        <div class="position-relative">
-                            <a href="#"><img src="${produit.image}" alt="${produit.nom}" class="rounded-3 w-100 h-120px object-fit-cover mb-3"/></a>
-                            ${produit.reduction ? `<span class="badge badge-light-danger position-absolute top-0 end-0 m-1">${produit.reduction}%</span>` : ''}
-                        </div>
-                        <div class="mb-2">
-                            <span class="fw-bold text-gray-800 text-hover-primary fs-6 d-block text-truncate">${produit.nom}</span>
-                        </div>
-                        <div>
-                            <span class="fw-bold fs-6 ms-1 gold-text">DT ${produit.prix}</span>
-                            ${produit.prixAncien ? `<span class="fw-bold fs-6 ms-1 text-decoration-line-through text-gray-500">DT ${produit.prixAncien}</span>` : ''}
-                        </div>
+    categorie.produits.sort((a,b)=>a.position - b.position).forEach(produit => {
+        const prodDiv = document.createElement("div");
+        prodDiv.className = "col-6 col-sm-4 col-md-3 col-lg-2";
+
+        prodDiv.innerHTML = `
+            <div class="card card-flush h-100 p-2 hover:scale-105 hover:shadow-lg cursor-pointer">
+                <div class="card-body text-center p-0">
+                    <div class="position-relative">
+                        <img src="${produit.image}" alt="${produit.nom}" class="rounded-3 w-100 h-120px object-fit-cover mb-3"/>
+                        ${produit.reduction ? `<span class="badge badge-light-danger position-absolute top-0 end-0 m-1">${produit.reduction}%</span>` : ''}
                     </div>
-                </div>`;
-            rowDiv.appendChild(prodDiv);
-        });
+                    <div class="mb-2">
+                        <span class="fw-bold text-gray-800 text-hover-primary fs-6 d-block text-truncate">${produit.nom}</span>
+                    </div>
+                    <div>
+                        <span class="fw-bold fs-6 ms-1 gold-text">DT ${produit.prix}</span>
+                        ${produit.prixAncien ? `<span class="fw-bold fs-6 ms-1 text-decoration-line-through text-gray-500">DT ${produit.prixAncien}</span>` : ''}
+                    </div>
+                </div>
+            </div>`;
 
-        tabDiv.appendChild(rowDiv);
-    } else {
-        tabDiv.innerHTML = '<p class="text-center text-muted">Aucun produit disponible dans cette catégorie.</p>';
-    }
+        // Add click event to navigate to product details page
+        const card = prodDiv.querySelector('.card');
+      card.addEventListener('click', () => {
+    // Save product in localStorage
+    localStorage.setItem('selectedProduct', JSON.stringify(produit));
+        // Go to details page
+        window.location.href = 'product.html';
+    });
 
-    tabsContainer.appendChild(tabDiv);
+
+        rowDiv.appendChild(prodDiv);
+    });
+
+    tabDiv.appendChild(rowDiv);
+} else {
+    tabDiv.innerHTML = '<p class="text-center text-muted">Aucun produit disponible dans cette catégorie.</p>';
+}
+
+tabsContainer.appendChild(tabDiv);
+
 });
 
 // Initialize Tiny Slider for categories
